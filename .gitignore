@@ -133,3 +133,8 @@ GSYMS
 /tools/sequitur-g2p/
 
 /kaldiwin_vs*
+
+# data folders from runing experiments 
+/egs/voxforge/s5/voxforge
+/egs/yesno/s5/waves_yesno
+/egs/yesno/s5/waves_yesno.tar.gz
