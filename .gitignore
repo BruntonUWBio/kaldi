@@ -138,3 +138,6 @@ GSYMS
 /egs/voxforge/s5/voxforge
 /egs/yesno/s5/waves_yesno
 /egs/yesno/s5/waves_yesno.tar.gz
+
+# possibly sensitive settings files
+/egs/BLASR/**/settings.config
