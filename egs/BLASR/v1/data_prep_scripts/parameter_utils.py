@@ -11,12 +11,19 @@ def validate_test_train_args(args):
 	return args
 
 def get_transcripts_root(config_file="settings.config"):
+	return _get_config_parameter('TranscriptsPath')
+
+def get_training_data_dir(config_file="settings.config"):
+	return _get_config_parameter('TrainingDataPath')
+
+
+def _get_config_parameter(param, config_file="settings.config"):
 	config = ConfigParser.ConfigParser()
 	config.read(config_file)
 
 	try:
-		return config.get('DEFAULT','TranscriptsPath')
+		return config.get('DEFAULT', param)
 
 	except KeyError:
-		print("TranscriptsPath must be set in settings.config")
+		print("%s must be set in settings.config"%(param))
 		sys.exit(1)
