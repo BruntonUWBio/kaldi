@@ -1,7 +1,6 @@
 import glob
 import argparse
-import ConfigParser
-import sys
+import parameter_utils
 
 parser = argparse.ArgumentParser(description='Concatenate a set of transcripts into a single file.')
 parser.add_argument('--train', action='store_true', 
@@ -12,22 +11,10 @@ parser.add_argument('--test', action='store_true',
 # TODO: add --path for a more general case.
 # TODO: add better error handling. 
 
-args = parser.parse_args() # gets args as a dict
+args = parser.parse_args()
+args = parameter_utils.validate_test_train_args(args)
 
-if (not (args.test ^ args.train)):
-	print("Either --train or --test must be included")
-	sys.exit(1)
-
-config = ConfigParser.ConfigParser()
-config.read('settings.config')
-
-try:
-	transcripts_root = config.get('DEFAULT','TranscriptsPath')
-
-except KeyError:
-	print("TranscriptsPath must be set in settings.config")
-	sys.exit(1)
-
+transcripts_root = parameter_utils.get_transcripts_root()
 
 if (args.train):
 	file_set = glob.glob ("%s/train/*.txt"%(transcripts_root))
