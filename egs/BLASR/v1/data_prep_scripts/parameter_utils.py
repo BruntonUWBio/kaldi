@@ -1,5 +1,6 @@
 import ConfigParser
 import sys
+import os
 
 def validate_test_train_args(args):
 	"""Given a ConfigParser, this returns the args. Along the way it validates that one and only 
@@ -11,10 +12,20 @@ def validate_test_train_args(args):
 	return args
 
 def get_transcripts_root(config_file="settings.config"):
-	return _get_config_parameter('TranscriptsPath')
+	return _validate_is_path(_get_config_parameter('TranscriptsPath'))
 
 def get_training_data_dir(config_file="settings.config"):
-	return _get_config_parameter('TrainingDataPath')
+	return _validate_is_path(_get_config_parameter('TrainingDataPath'))
+
+
+def _validate_is_path(str_to_validate):
+	"""We want to be able to use possibily unsafe commands (ex: subprocess.call). Because they are vulnerable to 
+	code injection, we want to validate our settings files just in case."""
+	if (os.path.exists(str_to_validate)):
+		return str_to_validate
+	else:
+		print("%s is not a valid path"%(param))
+		sys.exit(1)
 
 
 def _get_config_parameter(param, config_file="settings.config"):
