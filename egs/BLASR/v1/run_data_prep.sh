@@ -33,5 +33,22 @@ local/swbd1_data_prep.sh /media/storagedrive/ryan/corpora/LDC97S62
 # local/swbd1_data_prep.sh /mnt/matylda2/data/SWITCHBOARD_1R2 # BUT,
 # local/swbd1_data_prep.sh /exports/work/inf_hcrc_cstr_general/corpora/switchboard/switchboard1
 
+# This is adds proper prefixes to the switchboard data so that we can incorporate 
+# the patient data properly. 
+python ./data_prep_scripts/fix_swbd_spkr-id.py
+
+python ./data_prep_scripts/produce_combined_text.py --train
+python ./data_prep_scripts/produce_combined_text.py --test
+python ./data_prep_scripts/prep_data.py --train
+python ./data_prep_scripts/prep_data.py --test
+# The following script is a python script that executes a few bash functions. 
+# At first, this seems like more work then necessary, but it allows us to get 
+# paths from the same source as the other previous patient data prep scripts.
+python ./data_prep_scripts/combine_swbd_patient.py
+
+./utils/utt2spk_to_spk2utt.pl data/train/utt2spk > data/train/spk2utt
+
+./utils/fix_data_dir.sh data/train
+
 utils/prepare_lang.sh data/local/dict_nosp \
   "<unk>"  data/local/lang_nosp data/lang_nosp

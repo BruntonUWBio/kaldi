@@ -2,6 +2,8 @@ import ConfigParser
 import sys
 import os
 
+default_settings_path = os.path.join(os.path.dirname(__file__), "settings.config")
+
 def validate_test_train_args(args):
 	"""Given a ConfigParser, this returns the args. Along the way it validates that one and only 
 	one of the flags '--test' and '--train' is set. If is not satisfied, it fails."""
@@ -11,11 +13,11 @@ def validate_test_train_args(args):
 
 	return args
 
-def get_transcripts_root(config_file="settings.config"):
-	return _validate_is_path(_get_config_parameter('TranscriptsPath'))
+def get_transcripts_root(config_file=default_settings_path):
+	return _validate_is_path(_get_config_parameter('TranscriptsPath', config_file))
 
-def get_training_data_dir(config_file="settings.config"):
-	return _validate_is_path(_get_config_parameter('TrainingDataPath'))
+def get_training_data_dir(config_file=default_settings_path):
+	return _validate_is_path(_get_config_parameter('TrainingDataPath', config_file))
 
 
 def _validate_is_path(str_to_validate):
@@ -28,7 +30,7 @@ def _validate_is_path(str_to_validate):
 		sys.exit(1)
 
 
-def _get_config_parameter(param, config_file="settings.config"):
+def _get_config_parameter(param, config_file=default_settings_path):
 	config = ConfigParser.ConfigParser()
 	config.read(config_file)
 

@@ -1,18 +1,18 @@
 import glob
 import argparse
 import parameter_utils
+import os
 
 parser = argparse.ArgumentParser(description='Concatenate a set of transcripts into a single file.')
-parser.add_argument('--train', action='store_true', 
+parser.add_argument('--train', action='store_true',
 	help='Preset for creating training data. Creates a single file from files found in {TranscriptsPath}/train. (See settings.config)')
 parser.add_argument('--test', action='store_true',
 	help='Preset for creating testing data. Creates a single file from files found in {TranscriptsPath}/test. (See settings.config)')
 
 # TODO: add --path for a more general case.
-# TODO: add better error handling. 
+# TODO: add better error handling.
 
-args = parser.parse_args()
-args = parameter_utils.validate_test_train_args(args)
+args = parameter_utils.validate_test_train_args(parser.parse_args())
 
 transcripts_root = parameter_utils.get_transcripts_root()
 
@@ -31,4 +31,4 @@ for file_name in file_set:
 		for line in file_obj:
 			final_file.write(line)
 
-print("Combined %d files into %s"%(len(file_set), final_file))
+print("Combined %d files into %s"%(len(file_set), os.path.realpath(final_file.name)))
