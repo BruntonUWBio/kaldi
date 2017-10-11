@@ -27,9 +27,14 @@ scale_high = 2.0
 for line in sys.stdin.readlines():
   if len(line.strip()) == 0:
     continue
-  print '{0} sox --vol {1} -t wav - -t wav - |'.format(line.strip(), random.uniform(scale_low, scale_high))
+  # Switchboard datums get formed correctly, but our datums are already in .wav files.
+  if (line.strip().startswith('sw')):
+    print '{0} sox --vol {1} -t wav - -t wav - |'.format(line.strip(), random.uniform(scale_low, scale_high))
+  else:
+    print line.strip()
 "| sort -k1,1 -u  > $data_dir/wav.scp_scaled || exit 1;
   mv $data_dir/wav.scp_scaled $data_dir/wav.scp
+
   steps/make_mfcc.sh --nj 70 --mfcc-config conf/mfcc_hires.conf \
       --cmd "$train_cmd" data/train_scaled_hires exp/make_hires/train_scaled $mfccdir;
   steps/compute_cmvn_stats.sh data/train_scaled_hires exp/make_hires/train_scaled $mfccdir;
